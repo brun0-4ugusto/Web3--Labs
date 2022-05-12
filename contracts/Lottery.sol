@@ -3,8 +3,9 @@ pragma solidity ^0.8.13;
 
 contract Lottery {
     event NewPlayerAdd(address _player);
+    event Winner(address _winner);
     address payable[] public players;
-    address owner;
+    address public owner;
 
     constructor() {
         owner = msg.sender;
@@ -20,7 +21,7 @@ contract Lottery {
     }
 
     function enter() external payable {
-        require(msg.value == 10000 wei, "Fail. Send the right amount");
+        require(msg.value == 0.025 ether, "Fail. Send the right amount");
         players.push(payable(msg.sender));
         emit NewPlayerAdd(msg.sender);
     }
@@ -39,6 +40,7 @@ contract Lottery {
         (bool sent,) = payable(owner).call{value:managerFee}("");
         require(sent, "Failed");
         players = new address payable[](0);
+        emit Winner(winner);
         
     }
 
