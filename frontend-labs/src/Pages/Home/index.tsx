@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Web3 from "web3";
 import getWeb3 from "../../Assets/Web3/getWeb3";
-import logo from "../../Assets/images/logo.png"
 import styles from "./home.module.css";
 
 const rotas = [
   {
-    label: "lottery",
-    to: "/",
+    label: "Lottery",
+    to: "/lottery",
   },
 ];
 
@@ -28,7 +27,7 @@ export default function Home() {
   return (
     <header className={styles.header}>
       <div className={styles.header__logo}>CryptoLab</div> 
-      <nav>
+      <nav className={styles.header__nav}>
         <ul>
           {rotas.map((rota, index) => (
             <li key={index}>
