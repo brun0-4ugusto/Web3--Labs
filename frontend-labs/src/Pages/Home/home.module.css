@@ -1,31 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
-
-.header{
+.content{
     display: flex;
-    height: 110px;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    background-color: #131241;
-    background-image: url("../../Assets/images/fundo.webp");
+    height: 88vh;
+    justify-content: center;
+}
+.imgbackground {
+    position: absolute;
+    z-index: -1;
+    filter: blur(3px);
 }
 
-.header__logo{
-    font-size: 3vw;
-    font-family: 'Italiana', serif;
-    color: #fb2aab;
-    text-shadow: rgb(251 5 157) 0px 0px 4.23439px, rgb(251 34 168) 0px 0px 21.172px, rgb(251 34 168) 0px 0px 63.5159px;
-}
-
-.header__nav{
+.title{
     display: flex;
+    flex-direction: column;
     align-items: center;
+    color: #efefef;
+    filter: drop-shadow(2px 4px 6px black);
 }
 
-.header__nav ul {
-    list-style-type: disclosure-closed;
-    color: #fb2aab;
+.title h2{
+    font-size: 50px;
+    margin: 41px 0 20px 0;
 }
 
-.header__nav ul a{
-    color: #df4f4f;
+.title p{
+    font-size: 18px;
+}
+
+.getCoin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+.getCoin img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 20px;
 }
