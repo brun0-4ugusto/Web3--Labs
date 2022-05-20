@@ -23,7 +23,8 @@ export default function ConnectButton(){
       }, []);
 
       useEffect(()=>{
-        window.ethereum.on('accountsChanged', (accounts:Array<string>)=>{
+        try{
+          window.ethereum.on('accountsChanged', (accounts:Array<string>)=>{
             console.log(accounts);
             if(accounts.length !== 0){
                 setConnection(accounts[0]);
@@ -31,6 +32,10 @@ export default function ConnectButton(){
                 setConnection("Não Conectado")
             }
           });
+        }catch(err){
+          console.log(err)
+        }
+        
       })
       
       return(<button onClick={connect}>{connection}</button>)

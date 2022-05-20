@@ -1,4 +1,3 @@
-import { Link, Outlet } from "react-router-dom";
 import ConnectButton from "../ConnectButton";
 import Navigation from "../Navigation";
 import styles from "./Header.module.css";
