@@ -1,0 +1,43 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 88vh;
+    justify-content: center;
+}
+.imgbackground {
+    position: absolute;
+    z-index: -1;
+    filter: blur(3px);
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #efefef;
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+.title h2{
+    font-size: 50px;
+    margin: 41px 0 20px 0;
+}
+
+.title p{
+    font-size: 18px;
+}
+
+.getCoin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+.getCoin img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 20px;
+}

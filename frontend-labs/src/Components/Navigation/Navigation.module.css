@@ -1,0 +1,13 @@
+.header__nav{
+    display: flex;
+    align-items: center;
+}
+
+.header__nav ul {
+    list-style-type: disclosure-closed;
+    color: #fb2aab;
+}
+
+.header__nav ul a{
+    color: #df4f4f;
+}
