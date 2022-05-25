@@ -11,7 +11,7 @@ contract LabCoin is IERC20 {
     uint256 public totalSupply;
 
     constructor() {
-        totalSupply += 1000 * (10**18);
+        totalSupply += 1000e18;
         balanceOf[msg.sender] = totalSupply;
     }
 
@@ -90,7 +90,7 @@ contract LabCoin is IERC20 {
 
     function mint() external payable returns (bool) {
         require(msg.value == 0.025 ether, "Para participar envie 0.025 ether");
-        uint256 amount = 1000 * (10**decimals);
+        uint256 amount = 1000e18;
         totalSupply += amount;
         balanceOf[msg.sender] += amount;
         emit Transfer(address(0), msg.sender, amount);
