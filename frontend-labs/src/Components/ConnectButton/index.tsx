@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Button from '@mui/material/Button';
+
 
 export default function ConnectButton(){
     const [connection, setConnection] = useState<string>("Não Conectado");
@@ -25,7 +27,6 @@ export default function ConnectButton(){
       useEffect(()=>{
         try{
           window.ethereum.on('accountsChanged', (accounts:Array<string>)=>{
-            console.log(accounts);
             if(accounts.length !== 0){
                 setConnection(accounts[0]);
             }else{
@@ -37,6 +38,8 @@ export default function ConnectButton(){
         }
         
       })
-      
-      return(<button onClick={connect}>{connection}</button>)
+       if(connection === "Não Conectado"){
+        return <Button variant="outlined" color="error" onClick={connect}>{connection}</Button>
+      } 
+      return(<Button variant="contained" color="success" onClick={connect}>{connection}</Button>)
 }

@@ -1,6 +1,7 @@
 import styles from "./home.module.css";
 import logo from "../../Assets/images/CryptoLab.png"
 import coin from "../../Assets/images/coin.png"
+import ButtonMint from "../../Components/ButtonMintCoin";
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
         <p>Meu laboratório de testes de web3</p>
       </section>
       <section className={styles.getCoin}>
-        <button>Clique aqui e pegue algumas LabCoins</button>
+        <ButtonMint/>
         <img src={coin} alt="Logo" />
       </section>
     </main>
