@@ -6,16 +6,20 @@ contract LabCoin is IERC20 {
     string public name = "LabCoin";
     string public symbol = "CLC";
     uint8 public decimals = 18;
-    mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) public allowance;
-    uint256 public totalSupply;
+    mapping(address => uint256) private _balanceOf;
+    mapping(address => mapping(address => uint256)) public override allowance;
+    uint256 public override totalSupply;
 
     constructor() {
         totalSupply += 1000e18;
-        balanceOf[msg.sender] = totalSupply;
+        _balanceOf[msg.sender] = totalSupply;
     }
 
-    function transfer(address to, uint256 amount) public returns (bool) {
+    function balanceOf(address account) public view override returns (uint256) {
+        return _balances[account];
+    }
+
+    function transfer(address to, uint256 amount) public override returns (bool) {
         address owner = msg.sender;
         _transfer(owner, to, amount);
         return true;
@@ -29,20 +33,20 @@ contract LabCoin is IERC20 {
         require(from != address(0), "ERC20: transfer from the zero address");
         require(to != address(0), "ERC20: transfer to the zero address");
 
-        uint256 fromBalance = balanceOf[from];
+        uint256 fromBalance = _balanceOf[from];
         require(
             fromBalance >= amount,
             "ERC20: transfer amount exceeds balance"
         );
         unchecked {
-            balanceOf[from] = fromBalance - amount;
+            _balanceOf[from] = fromBalance - amount;
         }
-        balanceOf[to] += amount;
+        _balanceOf[to] += amount;
 
         emit Transfer(from, to, amount);
     }
 
-    function approve(address spender, uint256 amount) public returns (bool) {
+    function approve(address spender, uint256 amount) public override returns (bool) {
         address owner = msg.sender;
         _approve(owner, spender, amount);
         return true;
@@ -64,7 +68,7 @@ contract LabCoin is IERC20 {
         address from,
         address to,
         uint256 amount
-    ) public returns (bool) {
+    ) public override returns (bool) {
         address spender = msg.sender;
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
@@ -92,7 +96,7 @@ contract LabCoin is IERC20 {
         require(msg.value == 0.025 ether, "Para participar envie 0.025 ether");
         uint256 amount = 1000e18;
         totalSupply += amount;
-        balanceOf[msg.sender] += amount;
+        _balanceOf[msg.sender] += amount;
         emit Transfer(address(0), msg.sender, amount);
         return true;
     }

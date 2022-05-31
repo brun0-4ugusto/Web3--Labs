@@ -30,10 +30,14 @@ export default function ButtonMint(){
     })
    
     const mint = async ()=>{
-        const accounts = await window.ethereum.request({
+        try{ const accounts = await window.ethereum.request({
             method: "eth_requestAccounts",
           });
-        await labCoinInstance.methods.mint().send({from:accounts[0], value:web3.utils.toWei('0.025', 'ether')})
+        await labCoinInstance.methods.mint().send({from:accounts[0], value:web3.utils.toWei('0.025', 'ether')})}
+        catch(err){
+            console.log(err)
+        }
+       
     }
     
     return(<Button variant="contained" color="secondary" onClick={mint}>Clique aqui e pegue algumas LabCoins</Button>)

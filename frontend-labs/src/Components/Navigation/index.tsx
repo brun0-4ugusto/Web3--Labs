@@ -4,7 +4,7 @@ import styles from "./Navigation.module.css"
 export default function Navigation(){
     const rotas = [
         {
-          label: "Lottery",
+          label: "Concurso de Sorte",
           to: "/lottery",
         },
       ];

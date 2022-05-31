@@ -1,14 +1,16 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
-
+import "./ILabCoin.sol";
 contract Lottery {
     event NewPlayerAdd(address _player);
     event Winner(address _winner);
-    address payable[] public players;
+    address[] public players;
     address public owner;
+    ILabCoin public labCoin;
 
-    constructor() {
+    constructor(address _labCoin) {
         owner = msg.sender;
+        labCoin = ILabCoin(_labCoin);
     }
 
     modifier onlyOwner() {
@@ -17,29 +19,29 @@ contract Lottery {
     }
 
     function getBalance() public view returns (uint256) {
-        return address(this).balance;
+        return labCoin.balanceOf(address(this));
     }
 
-    function enter() external payable {
-        require(msg.value == 0.025 ether, "Fail. Send the right amount");
-        players.push(payable(msg.sender));
+    function enter() external {
+        labCoin.transfer(address(this), 200);
+        players.push(msg.sender);
         emit NewPlayerAdd(msg.sender);
     }
 
     function pickWinner(string memory _secretWord) external onlyOwner {
         require (players.length >= 3);
-        address payable winner;
+        uint _balance = getBalance();
+        
         uint number = pseudoRandomNumber(_secretWord);
         uint index = number % players.length;
-        winner = players[index];
-        uint managerFee = (getBalance() * 10 ) / 100;
-        uint winnerPrize = (getBalance() * 90 ) / 100;
+        address winner = players[index];
+        uint managerFee = (_balance * 10 ) / 100;
+        uint winnerPrize = (_balance * 90 ) / 100;
 
-        (bool success,) = winner.call{value:winnerPrize}("");
-        require(success, "Failed");
-        (bool sent,) = payable(owner).call{value:managerFee}("");
-        require(sent, "Failed");
-        players = new address payable[](0);
+        labCoin.transfer(winner, winnerPrize);
+        labCoin.transfer(owner, managerFee);
+        
+        players = new address[](0);
         emit Winner(winner);
         
     }
