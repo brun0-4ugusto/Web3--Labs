@@ -6,7 +6,7 @@ contract Lottery {
     event Winner(address _winner);
     address[] public players;
     address public owner;
-    ILabCoin public labCoin;
+    ILabCoin private labCoin;
 
     constructor(address _labCoin) {
         owner = msg.sender;
@@ -23,7 +23,9 @@ contract Lottery {
     }
 
     function enter() external {
-        labCoin.transfer(address(this), 200);
+        uint balanceBefore = getBalance();
+        labCoin.transferFrom(msg.sender,address(this), 200e18); 
+        require(balanceBefore+200e18 ==  getBalance(),"Balance incorrect");
         players.push(msg.sender);
         emit NewPlayerAdd(msg.sender);
     }

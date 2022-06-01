@@ -1,49 +1,66 @@
-const lotteryContract = artifacts.require('Lottery')
-const BN = web3.utils.BN
+const Lottery = artifacts.require("Lottery");
+const LabCoin = artifacts.require("LabCoin");
+const BN = web3.utils.BN;
 
-contract('Lottery Test', async (accounts) => {
-  let lottery
+contract("Lottery Test", async (accounts) => {
+  let lottery;
+  let labCoin;
   before(async () => {
-    lottery = await lotteryContract.deployed()
-  })
-  it('Contract Deployed', async () => {
-    assert.ok(lottery)
-  })
-  it('Enter Lottery', async () => {
-    const minimumValue = 0.025
-    await Promise.all(
-      accounts.map(async (account) => {
-        await lottery.enter({
-          from: account,
-          value: web3.utils.toWei('0.025', 'ether'),
-        })
-      }),
-    )
-    const balanceContract = BN(await lottery.getBalance()).toString()
-    const assertValue = minimumValue * accounts.length
-    const balanceValueInEther = web3.utils.fromWei(balanceContract, 'ether')
-    assert.equal(parseFloat(balanceValueInEther), assertValue)
-  })
-  it('Picking a winner', async () => {
-    const owner = await lottery.owner()
-    const balanceOwnerBefore = await web3.eth.getBalance(owner)
+    labCoin = await LabCoin.deployed();
+    lottery = await Lottery.deployed();
+  });
+  it("Contract Deployed", async () => {
+    assert.ok(lottery);
+
+    assert.equal(accounts[0], await lottery.owner());
+  });
+  it("Enter Lottery", async () => {
+    for (let i = 0; i < accounts.length; i++) {
+      await labCoin.mint({
+        value: web3.utils.toWei("0.025", "ether"),
+        from: accounts[i],
+      });
+      await labCoin.approve(lottery.address, BigInt(200e18), {
+        from: accounts[i],
+      });
+      await lottery.enter({ from: accounts[i] });
+    }
+  });
+  it("Pick Winner", async () => {
+    assert.equal(
+      BigInt(2000e18).toString(),
+      BN(await lottery.getBalance()).toString()
+    );
+    const ownerBalanceBefore = BN(
+      await labCoin.balanceOf(accounts[0])
+    ).toString();
     let playersBalance = await Promise.all(
       accounts.map(async (player) => {
         return {
-          [player]: await web3.eth.getBalance(player),
-        }
-      }),
-    )
-
-    const chooseWinner = await lottery.pickWinner('QualquerPalavra')
-    const winnerAddress = chooseWinner.logs[0].args._winner
+          [player]: BN(await labCoin.balanceOf(player)).toString(),
+        };
+      })
+    );
+    let chooseWinner = await lottery.pickWinner("Teste");
+    const winnerAddress = await chooseWinner.logs[0].args._winner;
     let winnerBalanceBefore = playersBalance.filter((player) => {
-      return Object.keys(player) == winnerAddress
-    })
-    winnerBalanceBefore = Object.values(winnerBalanceBefore[0])[0]
-    const winnerBalaceAfter = await web3.eth.getBalance(winnerAddress)
-    assert.isAbove(parseInt(winnerBalaceAfter), parseInt(winnerBalanceBefore))
-    const balanceOwnerAfter = await web3.eth.getBalance(owner)
-    assert.isAbove(parseInt(balanceOwnerAfter), parseInt(balanceOwnerBefore))
-  })
-})
+      return Object.keys(player) == winnerAddress;
+    });
+    winnerBalanceBefore = Object.values(winnerBalanceBefore[0])[0];
+    const winnerBalanceAfter = BN(
+      await labCoin.balanceOf(winnerAddress)
+    ).toString();
+    const ownerBalanceAfter = BN(
+      await labCoin.balanceOf(accounts[0])
+    ).toString();
+    assert.equal(
+      BigInt(winnerBalanceBefore) +
+        (BigInt(2000e18) * BigInt(90)) / BigInt(100),
+      BigInt(winnerBalanceAfter)
+    );
+    assert.equal(
+      BigInt(ownerBalanceBefore) + (BigInt(2000e18) * BigInt(10)) / BigInt(100),
+      BigInt(ownerBalanceAfter)
+    );
+  });
+});

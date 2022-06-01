@@ -16,7 +16,7 @@ contract LabCoin is IERC20 {
     }
 
     function balanceOf(address account) public view override returns (uint256) {
-        return _balances[account];
+        return _balanceOf[account];
     }
 
     function transfer(address to, uint256 amount) public override returns (bool) {
