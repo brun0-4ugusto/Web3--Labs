@@ -4,7 +4,7 @@ import "./ILabCoin.sol";
 contract Lottery {
     event NewPlayerAdd(address _player);
     event Winner(address _winner);
-    address[] public players;
+    address[] private players;
     address public owner;
     ILabCoin private labCoin;
 
@@ -20,6 +20,10 @@ contract Lottery {
 
     function getBalance() public view returns (uint256) {
         return labCoin.balanceOf(address(this));
+    }
+
+    function getPlayers() external view returns(address[] memory){
+        return players;
     }
 
     function enter() external {

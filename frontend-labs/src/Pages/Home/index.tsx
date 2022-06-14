@@ -1,7 +1,7 @@
 import styles from "./home.module.css";
 import logo from "../../Assets/images/CryptoLab.png"
 import coin from "../../Assets/images/coin.png"
-import ButtonMint from "../../Components/ButtonMintCoin";
+import ButtonMint from "./ButtonMintCoin";
 
 export default function Home() {
   return (
